@@ -1,0 +1,9 @@
+{
+    "name": "bash-script-playground-ubuntu",
+    "dockerComposeFile": "docker-compose.ubuntu.yml",
+    "service": "development",
+    "workspaceFolder": "/xyz",
+    "mounts": [
+        "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached"
+    ]
+}

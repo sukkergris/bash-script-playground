@@ -1,0 +1,12 @@
+
+.DS_Store
+env/
+.env
+
+# Monitoring runtime data (machine-generated, changes constantly)
+monitoring/reports/
+monitoring/baselines/
+# Keep folder structure, ignore content
+.evanescence/*
+!.evanescence/.gitkeep
+lib-bash/certs/openssl/reg.cnf

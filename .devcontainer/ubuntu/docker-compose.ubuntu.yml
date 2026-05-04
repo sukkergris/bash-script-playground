@@ -1,0 +1,19 @@
+services:
+  development:
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu
+    env_file:
+      - env/.env
+    volumes:
+      - ../..:/xyz:cached
+      - /run/host-services/ssh-auth.sock:/ssh-agent
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent
+    command: sleep infinity
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
