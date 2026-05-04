@@ -4,8 +4,10 @@
     "service": "development",
     "workspaceFolder": "/xyz",
     "mounts": [
-        "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached"
+        "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached",
+        "source=${localWorkspaceFolder}/bash-lib,target=/bash-lib,type=bind,consistency=cached"
     ],
+    "postCreateCommand": "echo 'export PATH=\"/bash-lib:$PATH\"' >> /root/.bashrc",
     "customizations": {
         "vscode": {
             "extensions": [

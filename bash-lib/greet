@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# greet — eksempel-kommando fra bash-lib
+#
+# Brug:  greet [navn]
+#
+# Demonstrerer at ${BASH_SOURCE[0]} peger på den rigtige fil
+# selv når scriptet kaldes via PATH.
+
+LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+name="${1:-verden}"
+
+echo "Hej, $name!"
+echo "  \$0                = $0"
+echo "  \${BASH_SOURCE[0]}   = ${BASH_SOURCE[0]}"
+echo "  LIB_DIR           = $LIB_DIR"
