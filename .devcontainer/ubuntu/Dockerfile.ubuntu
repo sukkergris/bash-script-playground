@@ -2,6 +2,9 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y \
     bash \
+    build-essential \
+    stow \
     curl \
     git \
+    neovim \
     && rm -rf /var/lib/apt/lists/*

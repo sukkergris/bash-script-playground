@@ -5,5 +5,22 @@
     "workspaceFolder": "/xyz",
     "mounts": [
         "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached"
-    ]
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "Anthropic.claude-code",
+                "vscodevim.vim",
+                "rogalmic.bash-debug",
+                "mads-hartmann.bash-ide-vscode",
+                "AndreasArvidsson.bashbook",
+                "streetsidesoftware.code-spell-checker",
+                "openai.chatgpt",
+                "streetsidesoftware.code-spell-checker-danish",
+                "EditorConfig.EditorConfig",
+                "google.geminicodeassist",
+                "timonwong.shellcheck"
+            ]
+        }
+    }
 }
