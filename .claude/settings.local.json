@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash -c 'source /tmp/stack_debug2.sh')",
+      "Bash(bash -c ' *)"
+    ]
+  }
+}

@@ -12,7 +12,7 @@
 #   Kig på indholdet:
 #
 #       ls /xyz/bash-lib
-#       cat /xyz/bash-lib/greet.sh
+#       cat /xyz/bash-lib/greet
 #
 # ─── Trin 2: Kald scriptet uden PATH ─────────────────────────────────────────
 #

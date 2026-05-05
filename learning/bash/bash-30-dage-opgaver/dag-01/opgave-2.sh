@@ -6,9 +6,11 @@
 #   ln -s "$(pwd)/dag-01/opgave-2.sh" /tmp/mit-script
 #   bash /tmp/mit-script
 #
-# Forventet resultat:
-#   $0              = /tmp/mit-script        ← symlink-stien
-#   ${BASH_SOURCE[0]} = /xyz/.../opgave-2.sh  ← den rigtige fil
+# Forventet observation:
+#   Når du kalder scriptet via en symlink, vil $0 normalt vise symlink-stien.
+#   ${BASH_SOURCE[0]} er heller ikke automatisk symlink-opløst i Bash.
+#   Pointen er derfor ikke at ${BASH_SOURCE[0]} "magisk" finder den rigtige fil,
+#   men at den er mere robust end $0 når kode bliver sourced eller genbrugt som modul.
 #
 # Spørgsmål: Hvornår er det et problem at bruge $0 til at finde scriptet?
 

@@ -1,70 +1,134 @@
-# Dag 2 — Hvorfor symlinks kan ødelægge `$0`
+# Dag 02 — Symlinks, `$0` og normalisering af script-stier
 
 ## Hvad du lærer i dag
-- Hvad der sker med `$0` ved symlinks
-- Hvorfor `${BASH_SOURCE[0]}` er det rigtige valg
+
+- Hvorfor `$0` ikke er stabil til path-opslag
+- Hvordan `${BASH_SOURCE[0]}` opfører sig ved execute vs source
+- Et macOS-kompatibelt normaliseringsmønster uden `readlink -f`
 
 ---
 
-## Scenariet
+## Koncept 1 — Entrypoint-adfærd i CLI
 
-Forestil dig denne symlink:
-```
+`$0` viser, hvordan scriptet blev kaldt fra CLI.
+
+Eksempel med symlink:
+
+```bash
 /usr/local/bin/myscript -> /Users/theodor/project/scripts/myscript.sh
 ```
 
 Når du kører:
-```
+
+```bash
 myscript
 ```
 
-så bliver `$0`:
-```
+kan `$0` være:
+
+```bash
 /usr/local/bin/myscript
 ```
 
-Men scriptet ligger i:
-```
-/Users/theodor/project/scripts/myscript.sh
-```
+Det er nyttigt til CLI-navn/help-tekst, men usikkert til at finde scriptets egen mappe.
 
 ---
 
-## Problemet
+## Koncept 2 — Edge cases: execute vs source og symlinks
 
-Hvis du bruger:
-```bash
-SCRIPT_DIR="$(dirname "$0")"
-```
+`${BASH_SOURCE[0]}` peger på filen Bash eksekverer/læser i den aktuelle stack-frame.
 
-så tror scriptet, at det ligger i `/usr/local/bin/`.
-
-Det betyder:
-- du loader moduler fra det forkerte sted
-- relative paths bliver forkerte
-- tests fejler
-- logging viser forkerte stier
+- Når scriptet eksekveres direkte, ligner `$0` og `${BASH_SOURCE[0]}` ofte hinanden.
+- Når scriptet sources, bliver `$0` typisk shellens navn (fx `bash` eller `zsh`), mens `${BASH_SOURCE[0]}` stadig peger på den sourcede fil.
+- Ved symlinks er `${BASH_SOURCE[0]}` ikke automatisk canonical path. Derfor skal du normalisere eksplicit.
 
 ---
 
-## Løsningen
+## Sammenligning
 
-**Brug aldrig `$0` til at finde scriptets placering.**
-**Brug `${BASH_SOURCE[0]}`.**
+| Variabel | Execute (`./script.sh`) | Source (`source script.sh`) | Bruges til |
+| --- | --- | --- | --- |
+| `$0` | Script-navn/-sti som kaldt | Shellens navn | CLI-navn, usage/help |
+| `${BASH_SOURCE[0]}` | Fil Bash læser | Sourced fil | Moduler, path-beregning |
+
+---
+
+## Normaliseringsmønster (macOS-kompatibelt)
+
+`readlink -f` findes typisk ikke på macOS. Brug i stedet et mønster baseret på `cd`, `pwd -P` og `readlink`:
 
 ```bash
 #!/usr/bin/env bash
-set -euo pipefail
 
+# Finder scriptets canonical directory, også hvis entrypoint er en symlink.
+script_source="${BASH_SOURCE[0]}"
+while [[ -h "$script_source" ]]; do
+	script_dir="$(cd -P -- "$(dirname -- "$script_source")" && pwd)"
+	script_source="$(readlink -- "$script_source")"
+	[[ "$script_source" != /* ]] && script_source="$script_dir/$script_source"
+done
+SCRIPT_DIR="$(cd -P -- "$(dirname -- "$script_source")" && pwd)"
+SCRIPT_PATH="$SCRIPT_DIR/$(basename -- "$script_source")"
+```
+
+Hvis du kun har brug for en absolut mappe uden symlink-opløsning, er dette nok:
+
+```bash
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-echo "Script ligger i: $SCRIPT_DIR"
 ```
 
 ---
 
-## Øvelse
+## Øvelser
 
-1. Opret `~/bin/test-symlink.sh` med indhold ovenfor
-2. Lav en symlink: `ln -s ~/bin/test-symlink.sh /tmp/symlinked`
-3. Kør `/tmp/symlinked` — hvad viser `SCRIPT_DIR`?
-4. Skift til `$0` i stedet — hvad ændrer sig?
+### 1) Direct vs. Sourced
+
+Lav `test-source.sh`:
+
+```bash
+#!/usr/bin/env bash
+echo "$0 = $0"
+echo "BASH_SOURCE[0] = ${BASH_SOURCE[0]}"
+```
+
+Kør:
+
+```bash
+./test-source.sh
+source ./test-source.sh
+```
+
+Spørgsmål:
+
+- Hvad ændrer sig for `$0`?
+- Hvad ændrer sig for `${BASH_SOURCE[0]}`?
+
+### 2) Normalisering med symlink
+
+1. Opret script i en mappe, fx:
+
+```bash
+mkdir -p ~/bin
+cp test-source.sh ~/bin/test-source.sh
+chmod +x ~/bin/test-source.sh
+```
+
+2. Opret symlink:
+
+```bash
+ln -sf ~/bin/test-source.sh /tmp/test-source-link
+```
+
+3. Udskriv i scriptet både rå `${BASH_SOURCE[0]}` og `SCRIPT_DIR`/`SCRIPT_PATH` fra normaliseringsmønsteret ovenfor.
+
+4. Kør både:
+
+```bash
+/tmp/test-source-link
+~/bin/test-source.sh
+```
+
+Spørgsmål:
+
+- Hvilke værdier ændrer sig?
+- Hvilken værdi er mest robust til at loade filer relativt til scriptet?
