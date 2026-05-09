@@ -6,6 +6,26 @@ Det er skrevet til dig som begynder i Bash, men med den ingeniør‑dybde du for
 
 ---
 
+## 📚 Struktur
+
+Dit learning er organiseret således:
+
+1. **[Basics](../basics/)** — Fundamentale Linux-koncepter (uafhængig af bash)
+   - Installation af programmer
+   - Filsystem og permissions
+   - Tekstbehandling
+   - System-information
+
+2. **Bash-30-dage** — Bash programmeringssprog fra bunden
+   - Dag 1-30: Core Bash-koncepter
+   - Øvelser: praktisk træning på hver dag
+
+3. **[Extensions](../extensions/)** — Praktiske værktøjer til brug MED bash
+   - fzf, jq, curl, ripgrep, xargs, make, docker, bats, shellcheck
+   - Uafhængige af bash-30-dage planen
+
+---
+
 ## Kapitel 1 — Forskellen på `$0` og `${BASH_SOURCE[0]}`
 
 **`$0` — entrypointet (hvordan scriptet blev kaldt)**
@@ -290,3 +310,25 @@ Filer ligger i `.evanescence/bash-30-dage/`.
 | 28 | [dag-28.md](../../.evanescence/bash-30-dage/dag-28.md) | OS-detection og cross-platform scripts |
 | 29 | [dag-29.md](../../.evanescence/bash-30-dage/dag-29.md) | Testing i Bash uden frameworks |
 | 30 | [dag-30.md](../../.evanescence/bash-30-dage/dag-30.md) | Byg en komplet CLI-tool |
+
+---
+
+## Extensions — Praktiske værktøjer til Bash
+
+**Vigtig:** Extensions er SELVSTÆNDIGE fra bash-30-dage planen. Du behøver ikke at gennemføre dag-01-30 før du kan starte extensions. De er blot værktøjer og patterns som ofte bruges SAMMEN med bash i praksis.
+
+**Struktur:** Hver extension ligger i `learning/extensions/<tool-name>/` med:
+- `dag-01.md` — introduktion, installation, grundkoncepter
+- `opgaver/` — praktiske øvelser
+
+| Extension | Tool | Beskrivelse | 
+|-----------|------|-------------|
+| 1 | [fzf](../../extensions/fzf/dag-01.md) | Interaktiv fuzzy finder for filer, processer, osv. |
+| 2 | [jq](../../extensions/jq/dag-01.md) | JSON parsing og transformation |
+| 3 | [curl](../../extensions/curl/dag-01.md) | HTTP requests og API-integration |
+| 4 | [ripgrep](../../extensions/ripgrep/dag-01.md) | Moderne tekstsøgning (erstatning for grep) |
+| 5 | [xargs](../../extensions/xargs/dag-01.md) | Parallel processing af tekst |
+| 6 | [make](../../extensions/make/dag-01.md) | Build automation og task-runner |
+| 7 | [docker](../../extensions/docker/dag-01.md) | Containerisering af bash-scripts |
+| 8 | [bats](../../extensions/bats/dag-01.md) | Bash testing framework |
+| 9 | [shellcheck](../../extensions/shellcheck/dag-01.md) | Statisk analyse og validering |
