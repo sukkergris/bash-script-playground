@@ -1,0 +1,35 @@
+version: '3'
+
+vars:
+  STOW_DIR: '{{.TASKFILE_DIR}}'
+  TARGET_DIR: '{{.TASKFILE_DIR}}/..'
+
+tasks:
+  stow-all:
+    desc: Stow alle pakker
+    cmds:
+      - stow --dir={{.STOW_DIR}} --target={{.TARGET_DIR}} *
+
+  unstow-all:
+    desc: Fjern alle stowede pakker
+    cmds:
+      - stow -D --dir={{.STOW_DIR}} --target={{.TARGET_DIR}} *
+
+  restow-all:
+    desc: Geninstaller alle pakker (nyttigt efter ændringer)
+    cmds:
+      - stow -R --dir={{.STOW_DIR}} --target={{.TARGET_DIR}} *
+
+  dry-run:
+    desc: Vis hvad stow ville gøre uden at gøre det
+    cmds:
+      - stow -n -v --dir={{.STOW_DIR}} --target={{.TARGET_DIR}} *
+
+  list:
+    desc: List alle tilgængelige pakker
+    cmds:
+      - ls -1 {{.STOW_DIR}}
+
+  default:
+    cmds:
+      - task --list
