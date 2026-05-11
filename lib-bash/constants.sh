@@ -7,4 +7,4 @@ set -Eeuo pipefail
 ROOT_MARKER="root-folder-marker"
 
 # How many directory levels we allow find_root to climb
-MAX_ROOT_DEPTH=10
+MAX_ROOT_DEPTH=7

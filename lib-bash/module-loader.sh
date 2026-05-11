@@ -17,3 +17,5 @@ lib::load-module() {
     local name="$1"
     local file="$LIB_DIR/"
 }
+
+util::find_root
