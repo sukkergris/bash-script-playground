@@ -21,7 +21,8 @@
                 "streetsidesoftware.code-spell-checker-danish",
                 "EditorConfig.EditorConfig",
                 "google.geminicodeassist",
-                "timonwong.shellcheck"
+                "timonwong.shellcheck",
+                "pokey.parse-tree"
             ]
         }
     }

@@ -2,9 +2,8 @@
 
 util::find_root() {
     local dir="$PWD"
-    local max_up=5
 
-    for ((i=0; i<max_up; i++)); do
+    for ((i=0; i<MAX_ROOT_DEPTH; i++)); do
         if [[ -f "$dir/root-folder-marker" ]]; then
             printf '%s\n' "$dir"
             return 0
